@@ -1,0 +1,368 @@
+
+#Installation Scripts
+#BiocManager attempt to install
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("shortRead", "genomicRanges", "genomicAlignments", "BSgenome", "rtracklayer", "BSgenome.Hsapiens.UCSC.hg38"))
+
+#hg19:
+Rscript pipe4C.R --vpFile=/Users/fugon/4C/pipe4C/VPinfo.txt --fqFolder=/Users/fugon/4C/ --outFolder=/Users/fugon/4C/outhg19/ --cores 8 --plot --wig --bigwig --genomePlot
+
+#hg38
+Rscript pipe4C.R --vpFile=/Users/fugon/4C/pipe4C/VPinfo.txt --fqFolder=/Users/fugon/4C/ --outFolder=/Users/fugon/4C/out/ --cores 8 --plot --wig --bigwig --genomePlot
+
+#Attempt on Cluster
+Rscript pipe4C.R –-vpFile=/share/lasallelab/Oran/dovetail/luhmes/4C/pipeline/pipe4C/VPinfo.txt --fqFolder=/share/lasallelab/Oran/dovetail/luhmes/4C –-outFolder=/share/lasallelab/Oran/dovetail/luhmes/4C/pipeline/out --cores 33 --wig --plot --bigwig --genomePlot
+
+
+#Set R library paths to personal folder
+# Get the current library paths
+old_libs <- .libPaths()
+
+# Set your personal folder as the first library path
+new_libs <- c("/share/lasallelab/Oran/R_packages", old_libs)
+
+# Update the library paths
+.libPaths(new_libs)
+
+#personal R package folder
+/share/lasallelab/Oran/R_packages
+
+#install CRAN programs in R
+install.packages("caTools", dependencies = TRUE, INSTALL_opts = '--no-lock')
+install.packages("config", dependencies = TRUE, INSTALL_opts = '--no-lock')
+install.packages("isotone", dependencies = TRUE, INSTALL_opts = '--no-lock')
+install.packages("devtools", dependencies = TRUE, INSTALL_opts = '--no-lock')
+
+#Attempts to install BiocManager programs on cluster
+
+source("http://bioconductor.org/biocLite.R")
+biocLite("ShortRead")
+
+conda create --prefix /share/lasallelab/Oran/4Conda
+
+conda install -c r r-essentials
+library("reshape2",lib.loc="/path/to/R-packages/")
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.10")
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager, /share/lasallelab/Oran/R_packages")
+BiocManager::install("ShortRead", dependencies = TRUE, lib.loc="/share/lasallelab/Oran/R_packages/")
+BiocManager::install("GenomicRanges")
+BiocManager::install("GenomicAlignments")
+BiocManager::install("BSgenome")
+BiocManager::install("BSgenome.Hsapiens.UCSC.hg19")
+BiocManager::install("rtracklayer")
+
+
+set CONDA_PKGS_DIRS=/share/lasallelab/Oran/conda
+conda install r-ShortRead 
+
+source("http://bioconductor.org/biocLite.R")
+biocLite("ShortRead")
+
+
+
+conda env list
+conda remove --name oj --all
+
+ genomes:
+  -
+    hg19
+    BSgenome.Hsapiens.UCSC.hg19
+  
+    
+ bowtie2:
+  -
+    hg19
+    /Users/fugon/4C/bowtie2hg19/
+
+
+
+
+
+From deLaat using premade functions
+
+setwd("~/4C/pipe4C")
+library(peakC)
+pipe4CFunctionsFile <- "functions.R"
+source(pipe4CFunctionsFile)
+
+SNRPN
+resultsDir <- "/Users/fugon/4C/out/RDS/"
+setwd(resultsDir)
+rdsFiles <- c("Neurons_SNRPN_replicate_1.rds","Neurons_SNRPN_replicate_2.rds", "Neurons_SNRPN_replicate_3.rds")
+resPeakC <- doPeakC(rdsFiles = rdsFiles)
+plot_C(resPeakC,y.max=3000)
+resPeaks <- getPeakCPeaks(resPeakC=resPeakC)
+peaksFile <- "./outF/Neurons_SNRPN_peakC_peaks.bed"
+exportPeakCPeaks(resPeakC=resPeakC,bedFile=peaksFile,name="Neurons_SNRPN_peakC_peaks")
+
+
+/Users/fugon/4C/outhg19/RDS/
+
+
+
+#Using bigwig PeakC tutorial (Preferred)
+
+data <- readqWig("/Users/fugon/4C/out/WIG/Neurons_PWAR1_replicate_1_nonblind_WIN21.wig", vp.pos=25137413, window=700e3)
+
+
+viewpoint <- 32224333
+files <- dir(path="data/", pattern="alpha-globin_FL_[123]_cis.wig.gz", full=T) data <- readMultipleWig(files, vp.pos = viewpoint)
+res <- combined.analysis(data, vp.pos = viewpoint)
+
+
+, window = 1.5e+06
+
+
+MUST REMOVE FIRST ROW OF WIG FILES TO AVOID scan() expected 'a real', got 'variableStep' ERROR
+
+#This was run in R using R studio
+
+
+#4C hg19
+library(peakC)
+library(isotone)
+
+#SNRPN-Neurons-hg19
+viewpoint <- 25092529
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_SNRPN_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 1.5e+06)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results: 23884650 23885146 23885510 23886457 23887416 23888912 23888917 23889122 23889269 23889493 23890641 23891410 23891883 23892753 23893153 23893955 23893960 23894768 23894853 23895369 23895374 23897118 23897821 23898551 23898556 23899326 23899331 23899587 23899592 23899939 23900119 23900613 23902345
+#PWAR1-Neurons-hg19
+viewpoint <- 25382560
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results:  25411021 25411695 25412004 25413626 25414016 25414719 25414786 25415198 25416959 25418796 25420229 25430482 25432382 25433059 25434253 25435582 25436272 25437321 25437502 25438162 25440449 25514112 2551429325514298 25514892 25515611 25515915 25516535 25516540 25517237 25517242 25517619 25517624 25518816 25520264 25520633 25520869 25521716 25522361 25522482 25523239 25524007 25524012 25524280 25524790 2552479525681421 25681628 25681731 25682357 25682362 25682477 25682652 25682657 25684138 25684143 25684904 25684909 25685278 25685947 25687109 25687759 25687764 25688005 25688010 25688401 25688406 25689001
+
+#UBE3A-Neurons-hg19
+viewpoint <- 25684119
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_UBE3A_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+library(isotone)
+print(res$peak)
+
+#Results: 25371923 25373198 25373203 25373663 25373932 25374228 25374553 25375172 25375495 25375693 25375698 25376054 25376654 25377069 25377074 25377366 25378712 25378936 25381437 25382001 25382169 25382294 2538260125382606 25382883 25384013 25384018
+
+
+
+#Undifferentiated
+#SNRPN-Undifferentiated-hg19
+viewpoint <- 25092529
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Undifferentiated_SNRPN_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 1.5e+06)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results: 25318254 25319122 25319127 25320352 25320928 25321081 25321746 25321751 25321834 25321839 25322044 25322203 25323037 25323042 25324065 25324133 25325012 25325017 25325212 25325513 25325698 25325703 25326293 25327096 25327101 25327776 25330393 25331161 25331178 25331597 25333219
+#PWAR1-Undifferentiated-hg19
+viewpoint <- 25382560
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Undifferentiated_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results:   25398982 25399613 25399618 25400169 25400174 25400773 25400960 25401232 25402228 25403007 25403882 25403951 25403956 25404008 25404013 25405285 25406256 25407023 25407475 25410011 25410314 25411021 25411695 25412004 25413626 25414016 25414719 25414786 25415198 25416959 25418796 25420229 25430482 25432382 25433059 25434253 25435582 25436272 25437321 25437502 25438162 25440449 25681421 25681628 25681731 25682357 25682362 25682477 25682652 25682657 25684138 25684143 25684904 25684909 25685278 25685947 25687109 25687759 25687764 25688005 25688010 25688401 25688406
+
+#UBE3A-Undifferentiated-hg19
+viewpoint <- 25684119
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Undifferentiated_UBE3A_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+library(isotone)
+print(res$peak)
+
+#Results:  25549549 25550152 25550543 25550746 25550791 25551408 25551413 25554175 25554421 25554426 25555124 25555501 25555506 25556429 25556569 25560725 25561090 25561332 25561337 25561564 25561569 25562286 25562291 25571668 25571673 25572306 25572311 25573456 25574169 25574565 25574641 25575001 25575459 25575943 25575948 25576113 25577566 25577571 25578282 25578287 25578675 25578680 25579321 25579697 25580651 25581459 25581464 25582804 25582809 25583224 25583229 25907922 25909060 25909571 25910462 25910573 25910922 25912059 25912247 25913028 25913033 25913172 25913177 25913738 25913743 25914221 25915237 25915657 25916063 25916758 25916763 25917153 25917332 25917664 25917820 25919614 25919619 25920627 25921188 25922170 25922175 25922635 25922640 25923393 25923398 25923794 25923799 25924548 25925111 25926082
+
+
+
+
+
+
+#SNRPN-Neurons-hg38
+library(peakC)
+library(isotone)
+viewpoint <- 24847382
+files <- dir(path="/Users/fugon/4C/out/WIG/unziped", pattern="Neurons_SNRPN_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 1.5e+06)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.089)
+print(res$peak)
+plot_C(res)
+
+23639999 23640363 23641310 23642269 23643765 23643770
+23643975 23644122 23644346 23645494 23646263 23646736
+23647606 23648006 23648808 23648813 23649621 23649706
+23650222 23650227 23651971 23652674
+
+23639999-23652674    distance: 12675
+
+
+Bin 1: 23639999 - 23644998 (5kb)
+23639999 23640363 23641310 23642269
+
+Bin 2: 23643765 - 23649621 (Adjusted by 3.6kb, Total: 9.9kb)
+23643765 23643770 23643975 23644122 23644346 23645494 23646263 23646736 23647606 23648006 23648808 23648813 23649621
+
+Bin 3: 23650222 - 23652674 (2.5kb)
+23649706 23650222 23650227 23651971 23652674
+
+
+#SNRPN-Undifferentiated-hg38
+library(peakC)
+library(isotone)
+viewpoint <- 24847382
+files <- dir(path="/Users/fugon/4C/out/WIG/unziped", pattern="Undifferentiated_SNRPN_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 1.5e+06)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.089)
+print(res$peak)
+plot_C(res)
+
+25073107 25073975 25073980 25075205 25075781 25075934
+25076599 25076604 25076687 25076692 25076897 25077056
+25077890 25077895 25078918 25078986 25079865 25079870
+25080065 25080366 25080551 25080556 25081146 25081949
+25081954 25082629 25085246 25086014 25086031 25086450
+25088072
+
+25073107-25088072    distance: 14965
+
+Bin 1: 25073107 - 25078106 (5kb)
+25073107 25073975 25073980 25075205 25075781 25075934 25076599 25076604 25076687 25076692 25076897 25077056 25077890 25077895
+
+Bin 2: 25078918 - 25083917 (Adjusted by 0.8kb, Total: 5.8kb)
+25078918 25078986 25079865 25079870 25080065 25080366 25080551 25080556 25081146 25081949 25081954 25082629 25085246
+
+Bin 3: 25086014 - 25091013 (Adjusted by 0.7kb, Total: 5.7kb)
+25086014 25086031 25086450 25088072
+
+#PWAR1-Neurons-hg38
+library(peakC)
+library(isotone)
+viewpoint <- 25137413
+files <- dir(path="/Users/fugon/4C/out/WIG/unziped", pattern="Neurons_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8.5e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.096)
+print(res$peak)
+plot_C(res)
+
+25165874 25269146 25269151 25269745 25270464 25270768
+25271388 25271393 25272090 25272095 25272472 25272477
+25273669 25275117 25275486 25275722 25276569 25277214
+25277335 25278092 25278860 25278865 25279133 25279643
+
+25165874-25279643 dist: 113769
+
+extended to 
+25165874 25166548 25166857 25168479 25168869 25169572
+25169639 25170051 25171812 25173649 25175082 25185335
+25187235 25187912 25189106 25190435 25191125 25192174
+25192355 25193015 25195302 25268965 25269146 25269151
+25269745 25270464 25270768 25271388 25271393 25272090
+25272095 25272472 25272477 25273669 25275117 25275486
+25275722 25276569 25277214 25277335 25278092 25278860
+25278865 25279133 25279643 25279648 25436274 25436481
+25436584 25437210 25437215 25437330 25437505 25437510
+25438991 25438996 25439757 25439762 25440131 25440800
+25441962 25442612 25442617 25442858 25442863 25443254
+25443259
+
+#PWAR1-Undif-hg38
+library(peakC)
+library(isotone)
+viewpoint <- 25137413
+files <- dir(path="/Users/fugon/4C/out/WIG/unziped", pattern="Undifferentiated_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8.5e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.096)
+print(res$peak)
+plot_C(res)
+
+25153835 25154466 25154471 25155022 25155027 25155626
+25155813 25156085 25157081 25157860 25158735 25158804
+25158809 25158861 25158866 25160138 25161109 25161876
+25162328 25164864 25165167 25165874 25166548 25166857
+25168479 25168869 25169572 25169639 25170051 25171812
+25173649 25175082 25185335 25187235 25187912 25189106
+25190435 25191125 25192174 25192355 25193015 25195302
+
+
+25153835-25195302    distance: 41467
+
+extended (similar last one to neurons)
+
+25153835 25154466 25154471 25155022 25155027 25155626
+25155813 25156085 25157081 25157860 25158735 25158804
+25158809 25158861 25158866 25160138 25161109 25161876
+25162328 25164864 25165167 25165874 25166548 25166857
+25168479 25168869 25169572 25169639 25170051 25171812
+25173649 25175082 25185335 25187235 25187912 25189106
+25190435 25191125 25192174 25192355 25193015 25195302
+25435386 25436274 25436481 25436584 25437210 25437215
+25437330 25437505 25437510 25438991 25438996 25439757
+25439762 25440131 25440800 25441962 25442612 25442617
+25442858 25442863 25443254 25443259
+
+#UBE3A-Neurons
+library(peakC)
+library(isotone)
+viewpoint <- 25438972
+files <- dir(path="/Users/fugon/4C/out/WIG/unziped", pattern="Neurons_UBE3A_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.088)
+print(res$peak)
+plot_C(res)
+
+25126776 25128051 25128056 25128516 25128785 25129081
+25129406 25130025 25130348 25130546 25130551 25130907
+25131507 25131922 25131927 25132219 25133565 25133789
+25136290 25136854 25137022
+
+25126776-25137022    dist: 10246
+
+#UBE3A-Undifferentiated
+viewpoint <- 25438972
+files <- dir(path="/Users/fugon/4C/out/WIG/unziped", pattern="Undifferentiated_UBE3A_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.088)
+print(res$peak)
+plot_C(res)
+
+25305005 25305396 25305599 25305644 25306261 25306266
+25309028 25309274 25309279 25309977 25310354 25310359
+25311282 25311422 25315578 25315943 25316185 25316190
+25316417 25316422 25317139 25317144 25326526 25327159
+25327164 25328309 25329022 25329418 25329494 25329854
+25330312 25330796 25330801 25330966 25332419 25332424
+25333135 25333140 25333528 25333533 25334174 25334550
+25335504 25336312 25336317 25337657 25337662 25338077
+25668591 25668596 25669074 25670090 25670510 25670916
+25671611 25671616 25672006 25672185 25672517 25672673
+25674467 25674472 25675480 25676041 25677023 25677028
+25677488 25677493 25678246 25678251 25678647 25678652
+25679401
+
+25305005-25338077    dist 33072   
+25668591-25679401    dist 10810   dist from last bin: 330514
+
+
+/Users/fugon/4C/out/WIG/Neurons_PWAR1_replicate_1_nonblind_WIN21.wig.gz
+
+
+
+data <- readqWig("Users/fugon/4C/out/WIG/Neurons_PWAR1_replicate_1_nonblind_WIN21.wig.gz", vp.pos=25137413, window=700e3) head(data$data)
+

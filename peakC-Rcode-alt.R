@@ -1,0 +1,88 @@
+#4C hg19
+library(peakC)
+library(isotone)
+
+#SNRPN-Neurons-hg19
+viewpoint <- 25092529
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_SNRPN_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 1.5e+06)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results: 23884650 23885146 23885510 23886457 23887416 23888912 23888917 23889122 23889269 23889493 23890641 23891410 23891883 23892753 23893153 23893955 23893960 23894768 23894853 23895369 23895374 23897118 23897821 23898551 23898556 23899326 23899331 23899587 23899592 23899939 23900119 23900613 23902345
+
+#PWAR1-Neurons-hg19
+viewpoint <- 25382560
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results:  25411021 25411695 25412004 25413626 25414016 25414719 25414786 25415198 25416959 25418796 25420229 25430482 25432382 25433059 25434253 25435582 25436272 25437321 25437502 25438162 25440449 25514112 25514293
+#25514298 25514892 25515611 25515915 25516535 25516540 25517237 25517242 25517619 25517624 25518816 25520264 25520633 25520869 25521716 25522361 25522482 25523239 25524007 25524012 25524280 25524790 25524795
+#25681421 25681628 25681731 25682357 25682362 25682477 25682652 25682657 25684138 25684143 25684904 25684909 25685278 25685947 25687109 25687759 25687764 25688005 25688010 25688401 25688406 25689001
+
+#UBE3A-Neurons-hg19
+viewpoint <- 25684119
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_UBE3A_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+library(isotone)
+print(res$peak)
+
+#Results: 25371923 25373198 25373203 25373663 25373932 25374228 25374553 25375172 25375495 25375693 25375698 25376054 25376654 25377069 25377074 25377366 25378712 25378936 25381437 25382001 25382169 25382294 25382601
+#25382606 25382883 25384013 25384018
+
+
+#Undifferentiated
+
+#SNRPN-Undifferentiated-hg19
+viewpoint <- 25092529
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Undifferentiated_SNRPN_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 1.5e+06)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results: 23884650 23885146 23885510 23886457 23887416 23888912 23888917 23889122 23889269 23889493 23890641 23891410 23891883 23892753 23893153 23893955 23893960 23894768 23894853 23895369 23895374 23897118 23897821 23898551 23898556 23899326 23899331 23899587 23899592 23899939 23900119 23900613 23902345
+
+#PWAR1-Undifferentiated-hg19
+viewpoint <- 25382560
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Undifferentiated_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+#Results:  25411021 25411695 25412004 25413626 25414016 25414719 25414786 25415198 25416959 25418796 25420229 25430482 25432382 25433059 25434253 25435582 25436272 25437321 25437502 25438162 25440449 25514112 25514293
+25514298 25514892 25515611 25515915 25516535 25516540 25517237 25517242 25517619 25517624 25518816 25520264 25520633 25520869 25521716 25522361 25522482 25523239 25524007 25524012 25524280 25524790 25524795
+25681421 25681628 25681731 25682357 25682362 25682477 25682652 25682657 25684138 25684143 25684904 25684909 25685278 25685947 25687109 25687759 25687764 25688005 25688010 25688401 25688406 25689001
+
+#UBE3A-Undifferentiated-hg19
+viewpoint <- 25684119
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Undifferentiated_UBE3A_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+library(isotone)
+head(res$peak)
+print(res$peak)
+
+#Results: 25371923 25373198 25373203 25373663 25373932 25374228 25374553 25375172 25375495 25375693 25375698 25376054 25376654 25377069 25377074 25377366 25378712 25378936 25381437 25382001 25382169 25382294 25382601
+25382606 25382883 25384013 25384018
+
+
+#PWAR1-Neurons-hg19
+viewpoint <- 25382560
+files <- dir(path="/Users/fugon/4C/outhg19/WIG/unziped", pattern="Neurons_PWAR1_replicate_[123]_nonblind_WIN21.wig", full=T)
+data <- readMultipleWig(files, vp.pos = viewpoint, window = 8e+05)
+res <- combined.analysis(data, vp.pos = viewpoint, alphaFDR = 0.1)
+plot_C(res)
+print(res$peak)
+
+res$p.value
+res$sel
